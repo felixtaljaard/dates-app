@@ -1,5 +1,10 @@
 const notesModel = require('./notesModel');
+const notesView = require('./notesview');
+
 
 const model = new notesModel();
-console.log(model.getNotes());
-console.log('The notes app is running');
+model.addNote('This is an example note');
+
+const view = new notesView(model);
+
+view.displayNotes();
