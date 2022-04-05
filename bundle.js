@@ -32,6 +32,14 @@
         constructor(model2) {
           this.model = model2;
           this.mainContainerEl = document.querySelector("#main-container");
+          document.querySelector("#add-note-btn").addEventListener("click", () => {
+            const newNote = document.querySelector("#add-note-input").value;
+            this.addNewNote(newNote);
+          });
+        }
+        addNewNote(newNote) {
+          this.model.addNote(newNote);
+          this.displayNotes();
         }
         displayNotes() {
           const notes = this.model.getNotes();
