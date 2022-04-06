@@ -14,6 +14,10 @@ class notesModel {
   reset() {
     this.notesarray = [];
   }
+
+  setNotes(notes) {
+    this.notesarray = notes
+  }
 }
 
 

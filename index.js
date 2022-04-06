@@ -1,10 +1,13 @@
 const notesModel = require('./notesModel');
 const notesView = require('./notesview');
+const NotesApi = require('./notesAPI');
 
 
+const api = new NotesApi();
 const model = new notesModel();
-model.addNote('This is an example note');
+const view = new notesView(model, api);
 
-const view = new notesView(model);
-
-view.displayNotes();
+api.loadNotes((notes) => {
+  model.setNotes(notes);
+  view.displayNotes();
+});
