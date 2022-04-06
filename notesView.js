@@ -11,12 +11,16 @@ class notesView {
   }
 
   addNewNote(newNote){
-    this.model.addNote(newNote);
-    this.displayNotes();
+    // this.model.addNote(newNote);
+    // this.displayNotes();
+
+    this.api.createNote(data =>{
+      this.model.addNote(newNote);
+      this.displayNotes()
+    })
   }
 
   displayNotes() {
-
     document.querySelectorAll('.note').forEach(element => {
       element.remove();
     });

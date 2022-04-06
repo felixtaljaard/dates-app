@@ -12,4 +12,16 @@ describe('Notes api class', () => {
       expect(note.note).toBe("This note is coming from the server");
     });
   });
+
+  it('sends the post data', async () => {
+    const api = new NotesApi();
+    fetch.mockResponseOnce(JSON.stringify({
+      method: "POST",
+      note: "This note is coming from the user"
+    }));
+
+    api.loadNotes((note) => {
+      expect(note.note).toBe("This note is coming from the user");
+    });
+  }) 
 });

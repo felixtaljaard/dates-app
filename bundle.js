@@ -7,7 +7,7 @@
   // notesModel.js
   var require_notesModel = __commonJS({
     "notesModel.js"(exports, module) {
-      var notesModel2 = class {
+      var notesModel = class {
         constructor() {
           this.notesarray = [];
         }
@@ -24,14 +24,14 @@
           this.notesarray = notes;
         }
       };
-      module.exports = notesModel2;
+      module.exports = notesModel;
     }
   });
 
-  // notesview.js
-  var require_notesview = __commonJS({
-    "notesview.js"(exports, module) {
-      var notesView2 = class {
+  // notesView.js
+  var require_notesView = __commonJS({
+    "notesView.js"(exports, module) {
+      var notesView = class {
         constructor(model2, api2) {
           this.model = model2;
           this.api = api2;
@@ -42,8 +42,10 @@
           });
         }
         addNewNote(newNote) {
-          this.model.addNote(newNote);
-          this.displayNotes();
+          this.api.createNote((data) => {
+            this.model.addNote(newNote);
+            this.displayNotes();
+          });
         }
         displayNotes() {
           document.querySelectorAll(".note").forEach((element) => {
@@ -61,7 +63,7 @@
           });
         }
       };
-      module.exports = notesView2;
+      module.exports = notesView;
     }
   });
 
@@ -74,18 +76,27 @@
             callback(data);
           });
         }
+        createNote(callback) {
+          fetch("http://localhost:8080/", {
+            method: "POST",
+            header: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(callback)
+          }).then((response) => response.json()).then((data) => callback(data));
+        }
       };
       module.exports = NotesApi2;
     }
   });
 
   // index.js
-  var notesModel = require_notesModel();
-  var notesView = require_notesview();
+  var NotesModel = require_notesModel();
+  var NotesView = require_notesView();
   var NotesApi = require_notesAPI();
   var api = new NotesApi();
-  var model = new notesModel();
-  var view = new notesView(model, api);
+  var model = new NotesModel();
+  var view = new NotesView(model, api);
   api.loadNotes((notes) => {
     model.setNotes(notes);
     view.displayNotes();
