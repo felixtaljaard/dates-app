@@ -1,6 +1,6 @@
 const NotesModel = require('./notesModel');
 const NotesView = require('./notesView');
-const NotesApi = require('./notesApi');
+const NotesApi = require('./notesAPI');
 
 const api = new NotesApi();
 const model = new NotesModel();

@@ -6,14 +6,21 @@ class NotesApi {
       .catch(() => error())
   };
 
-  async createNote(data = {}) {
+  async createNote(data = {}, error) {
     const response = await fetch("http://localhost:3000/notes", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
-    });
+    }).catch(() => error());
+    return response.json();
+  }
+
+  async deleteNotes() {
+      const response = await fetch("http://localhost:3000/notes", {
+        method: 'DELETE',
+      })
     return response.json();
   }
 }

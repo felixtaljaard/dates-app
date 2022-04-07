@@ -5,17 +5,22 @@ class NotesView {
     this.mainContainer = document.querySelector("#main-container");
     const newNoteBtn = document.querySelector("#add-note-btn");
     const newNoteInput = document.querySelector("#add-note-input");
-
+    const deleteNotesBtn = document.querySelector("#delete-all-btn");
     newNoteBtn.addEventListener("click", () => {
       this.newNote(newNoteInput.value);
       newNoteInput.value = "";
+    });
+    deleteNotesBtn.addEventListener("click", () => {
+      this.api.deleteNotes()
     });
   }
 
   newNote(note) {
     this.api
-    .createNote({ content: note })
-    .then(this.displayNotes());
+      .createNote({ content: note }, () => {
+        view.displayError();
+      })
+      .then(this.displayNotes());
   }
 
   displayNotes() {
@@ -32,13 +37,20 @@ class NotesView {
         noteEl.innerText = note;
         noteEl.className = "note";
         this.mainContainer.append(noteEl);
+        const deleteBtn = document.createElement("button");
+        deleteBtn.innerText = "Delete";
+        deleteBtn.className = "delete-btn";
+        noteEl.prepend(deleteBtn);
+        deleteBtn.addEventListener("click", () => {
+          noteEl.remove();
+        });
       });
     });
   }
 
   displayError() {
-    console.log('Error is here')
-    this.mainContainer.append('Oops sorry')
+    console.log("Error is here");
+    this.mainContainer.append("Oops sorry");
   }
 }
 

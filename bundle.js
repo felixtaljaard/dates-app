@@ -38,13 +38,19 @@
           this.mainContainer = document.querySelector("#main-container");
           const newNoteBtn = document.querySelector("#add-note-btn");
           const newNoteInput = document.querySelector("#add-note-input");
+          const deleteNotesBtn = document.querySelector("#delete-all-btn");
           newNoteBtn.addEventListener("click", () => {
             this.newNote(newNoteInput.value);
             newNoteInput.value = "";
           });
+          deleteNotesBtn.addEventListener("click", () => {
+            this.api.deleteNotes();
+          });
         }
         newNote(note) {
-          this.api.createNote({ content: note }).then(this.displayNotes());
+          this.api.createNote({ content: note }, () => {
+            view.displayError();
+          }).then(this.displayNotes());
         }
         displayNotes() {
           document.querySelectorAll(".note").forEach((element) => {
@@ -58,6 +64,13 @@
               noteEl.innerText = note;
               noteEl.className = "note";
               this.mainContainer.append(noteEl);
+              const deleteBtn = document.createElement("button");
+              deleteBtn.innerText = "Delete";
+              deleteBtn.className = "delete-btn";
+              noteEl.prepend(deleteBtn);
+              deleteBtn.addEventListener("click", () => {
+                noteEl.remove();
+              });
             });
           });
         }
@@ -70,20 +83,26 @@
     }
   });
 
-  // notesApi.js
-  var require_notesApi = __commonJS({
-    "notesApi.js"(exports, module) {
+  // notesAPI.js
+  var require_notesAPI = __commonJS({
+    "notesAPI.js"(exports, module) {
       var NotesApi2 = class {
         loadNotes(callback, error) {
           fetch("http://localhost:3000/notes").then((response) => response.json()).then((data) => callback(data)).catch(() => error());
         }
-        async createNote(data = {}) {
+        async createNote(data = {}, error) {
           const response = await fetch("http://localhost:3000/notes", {
             method: "POST",
             headers: {
               "Content-Type": "application/json"
             },
             body: JSON.stringify(data)
+          }).catch(() => error());
+          return response.json();
+        }
+        async deleteNotes() {
+          const response = await fetch("http://localhost:3000/notes", {
+            method: "DELETE"
           });
           return response.json();
         }
@@ -95,14 +114,14 @@
   // index.js
   var NotesModel = require_notesModel();
   var NotesView = require_notesView();
-  var NotesApi = require_notesApi();
+  var NotesApi = require_notesAPI();
   var api = new NotesApi();
   var model = new NotesModel();
-  var view = new NotesView(model, api);
+  var view2 = new NotesView(model, api);
   api.loadNotes((notes) => {
     model.setNotes(notes);
-    view.displayNotes();
+    view2.displayNotes();
   }, () => {
-    view.displayError();
+    view2.displayError();
   });
 })();
