@@ -3,16 +3,19 @@
  */
 
 const fs = require('fs');
+require('jest-fetch-mock').enableMocks()
 
 const notesView = require('./notesView');
 const notesModel = require('./notesModel');
+const notesApi = require('./notesAPI')
 
 describe('Notes View', () => {
   it('displays two notes', () => {
     document.body.innerHTML = fs.readFileSync('./index.html');
 
+    const api = new notesApi();
     const model = new notesModel();
-    const view = new notesView(model);
+    const view = new notesView(model, api);
     model.addNote('Buy milk');
     model.addNote('Get ripped');
 
@@ -23,8 +26,9 @@ describe('Notes View', () => {
   it('adds a new note', () => {
     document.body.innerHTML = fs.readFileSync('./index.html');
     
+    const api = new notesApi();
     const model = new notesModel();
-    const view = new notesView(model);
+    const view = new notesView(model, api);
 
     const input = document.querySelector('#add-note-input');
     input.value = 'My new amazing test note';
@@ -38,8 +42,9 @@ describe('Notes View', () => {
   it('clears the list of previous notes before displaying', () => {
     document.body.innerHTML = fs.readFileSync('./index.html');
 
+    const api = new notesApi();
     const model = new notesModel();
-    const view = new notesView(model);
+    const view = new notesView(model, api);
     model.addNote('one');
     model.addNote('two');
 

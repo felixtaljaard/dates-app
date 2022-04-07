@@ -1,24 +1,24 @@
-class notesModel {
+class NotesModel {
   constructor(){
-    this.notesarray = [];
+    this.notes = [];
   }
 
   getNotes() {
-    return this.notesarray;
+    return this.notes;
   }
 
   addNote(note) {
-    this.notesarray.push(note);
+    this.notes.push(note);
   }
 
   reset() {
-    this.notesarray = [];
+    this.notes = [];
   }
 
   setNotes(notes) {
-    this.notesarray = notes
+    this.notes = notes
   }
 }
 
 
-module.exports = notesModel;
+module.exports = NotesModel;
