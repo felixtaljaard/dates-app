@@ -61,6 +61,10 @@
             });
           });
         }
+        displayError() {
+          console.log("Error is here");
+          this.mainContainer.append("Oops sorry");
+        }
       };
       module.exports = NotesView2;
     }
@@ -70,8 +74,8 @@
   var require_notesApi = __commonJS({
     "notesApi.js"(exports, module) {
       var NotesApi2 = class {
-        loadNotes(callback) {
-          fetch("http://localhost:3000/notes").then((response) => response.json()).then((data) => callback(data));
+        loadNotes(callback, error) {
+          fetch("http://localhost:3000/notes").then((response) => response.json()).then((data) => callback(data)).catch(() => error());
         }
         async createNote(data = {}) {
           const response = await fetch("http://localhost:3000/notes", {
@@ -98,5 +102,7 @@
   api.loadNotes((notes) => {
     model.setNotes(notes);
     view.displayNotes();
+  }, () => {
+    view.displayError();
   });
 })();

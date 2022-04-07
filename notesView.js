@@ -35,6 +35,11 @@ class NotesView {
       });
     });
   }
+
+  displayError() {
+    console.log('Error is here')
+    this.mainContainer.append('Oops sorry')
+  }
 }
 
 module.exports = NotesView;

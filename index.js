@@ -9,4 +9,6 @@ const view = new NotesView(model, api);
 api.loadNotes((notes) => {
   model.setNotes(notes);
   view.displayNotes();
+}, () => {
+  view.displayError();
 });
